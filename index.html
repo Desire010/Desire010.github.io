@@ -236,7 +236,13 @@
             fetch("https://script.google.com/macros/s/AKfycbwE2ySErSi0fyTD_TPGba7ndmC2x-IpnWgNJbZ_vvATUqUVcsprmmDuObyIs63GwIzdtA/exec", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data)
+                body: JSON.stringify({
+                    nom: document.getElementById("nom").value,
+                    prenom: document.getElementById("prenom").value,
+                    email: document.getElementById("email").value,
+                    quartier: document.getElementById("quartier").value,
+                    telephone: "+225" + document.getElementById("telephone").value
+                })
             })
             .then(response => response.text())
             .then(data => alert("Données enregistrées !"))

@@ -116,6 +116,12 @@
     <script>
         document.getElementById("form").addEventListener("submit", function(event) {
             event.preventDefault();
+            
+            // Désactiver le bouton pendant l'envoi
+            const submitButton = this.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.textContent = "Envoi en cours...";
+
             const data = {
                 nom: document.getElementById("nom").value,
                 prenom: document.getElementById("prenom").value,
@@ -126,27 +132,42 @@
             
             fetch("https://script.google.com/macros/s/AKfycbyJ-yVdECMevhG4X4pfapI5X2xBk7x4SwEManZVj83ku0S0uAW2GZwKStA5AGb3yM0oxQ/exec", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                mode: "cors",  // ✅ Active CORS
-                body: JSON.stringify({
-                    nom: document.getElementById("nom").value,
-                    prenom: document.getElementById("prenom").value,
-                    email: document.getElementById("email").value,
-                    quartier: document.getElementById("quartier").value,
-                    telephone: "+225" + document.getElementById("telephone").value
-                })
+                mode: "cors",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data)
             })
-            .then(response => response.json()) 
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erreur réseau');
+                }
+                return response.text();
+            })
+            .then(text => {
+                try {
+                    return JSON.parse(text);
+                } catch (e) {
+                    throw new Error('Réponse invalide du serveur');
+                }
+            })
             .then(result => {
-                if (result.message) {
+                if (result.success) {
                     alert("✅ " + result.message);
                     document.getElementById("form").reset();
                 } else {
-                    alert("❌ Erreur : " + result.error);
+                    alert("❌ Erreur : " + (result.error || "Erreur inconnue"));
                 }
             })
-            .catch(error => alert("❌ Erreur de connexion : " + error));
+            .catch(error => {
+                alert("❌ Erreur : " + error.message);
+            })
+            .finally(() => {
+                // Réactiver le bouton
+                submitButton.disabled = false;
+                submitButton.textContent = "Envoyer";
             });
+        });
 
     </script>
 </body>

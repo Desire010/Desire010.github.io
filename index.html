@@ -205,7 +205,6 @@
 </head>
 <body>
     <div class="overlay"></div>
-    <!-- <img src="logoAD.png" alt="JADAR Akouedo Rehoboth" class="logo"> -->
     
     <div class="form-container">
         <h2>Formulaire d'Enregistrement</h2>
@@ -236,18 +235,20 @@
             fetch("https://script.google.com/macros/s/AKfycbwE2ySErSi0fyTD_TPGba7ndmC2x-IpnWgNJbZ_vvATUqUVcsprmmDuObyIs63GwIzdtA/exec", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    nom: document.getElementById("nom").value,
-                    prenom: document.getElementById("prenom").value,
-                    email: document.getElementById("email").value,
-                    quartier: document.getElementById("quartier").value,
-                    telephone: "+225" + document.getElementById("telephone").value
-                })
+                body: JSON.stringify(data)
             })
-            .then(response => response.text())
-            .then(data => alert("Données enregistrées !"))
-            .catch(error => alert("Erreur : " + error));
+            .then(response => response.json())  // Convertir la réponse en JSON
+            .then(result => {
+                if (result.message) {
+                    alert("✅ " + result.message);
+                    document.getElementById("form").reset(); // Réinitialiser le formulaire
+                } else {
+                    alert("❌ Erreur : " + result.error);
+                }
+            })
+            .catch(error => alert("❌ Erreur de connexion : " + error));
         });
+
     </script>
 </body>
 </html>

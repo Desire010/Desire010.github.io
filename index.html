@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -90,14 +90,158 @@
             
             fetch("https://script.google.com/macros/s/AKfycbwE2ySErSi0fyTD_TPGba7ndmC2x-IpnWgNJbZ_vvATUqUVcsprmmDuObyIs63GwIzdtA/exec", {
                 method: "POST",
-                mode: "no-cors",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data)
-            }).then(response => response.text())
-              .then(data => alert("Données enregistrées !"))
-              .catch(error => alert("Erreur : " + error));
+                body: JSON.stringify({
+                    nom: document.getElementById("nom").value,
+                    prenom: document.getElementById("prenom").value,
+                    email: document.getElementById("email").value,
+                    telephone: document.getElementById("telephone").value
+                })
+            })
+            .then(response => response.text())
+            .then(data => alert("Données enregistrées !"))
+            .catch(error => alert("Erreur : " + error));
         });
     </script>
 
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire d'Enregistrement</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: url('JADAR.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            padding: 20px;
+        }
+        .logo {
+            width: 200px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+        }
+        .form-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            width: 350px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+        }
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .phone-input {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .phone-prefix {
+            background: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            color: #333;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        input:focus {
+            border-color: #007bff;
+            outline: none;
+            background: white;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+    <!-- <img src="logoAD.png" alt="JADAR Akouedo Rehoboth" class="logo"> -->
+    
+    <div class="form-container">
+        <h2>Formulaire d'Enregistrement</h2>
+        <form id="form">
+            <input type="text" id="nom" placeholder="Nom" required>
+            <input type="text" id="prenom" placeholder="Prénom" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="text" id="quartier" placeholder="Quartier" required>
+            <div class="phone-input">
+                <span class="phone-prefix">+225</span>
+                <input type="tel" id="telephone" placeholder="Téléphone" required>
+            </div>
+            <button type="submit">Envoyer</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const data = {
+                nom: document.getElementById("nom").value,
+                prenom: document.getElementById("prenom").value,
+                email: document.getElementById("email").value,
+                quartier: document.getElementById("quartier").value,
+                telephone: "+225" + document.getElementById("telephone").value
+            };
+            
+            fetch("https://script.google.com/macros/s/AKfycbwE2ySErSi0fyTD_TPGba7ndmC2x-IpnWgNJbZ_vvATUqUVcsprmmDuObyIs63GwIzdtA/exec", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.text())
+            .then(data => alert("Données enregistrées !"))
+            .catch(error => alert("Erreur : " + error));
+        });
+    </script>
 </body>
 </html>

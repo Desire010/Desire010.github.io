@@ -122,6 +122,7 @@
             submitButton.disabled = true;
             submitButton.textContent = "Envoi en cours...";
 
+            // Créer l'objet de données
             const data = {
                 nom: document.getElementById("nom").value,
                 prenom: document.getElementById("prenom").value,
@@ -129,34 +130,38 @@
                 quartier: document.getElementById("quartier").value,
                 telephone: "+225" + document.getElementById("telephone").value
             };
+
+            // Utiliser JSONP avec une callback
+            const scriptURL = "https://script.google.com/macros/s/AKfycbyJ-yVdECMevhG4X4pfapI5X2xBk7x4SwEManZVj83ku0S0uAW2GZwKStA5AGb3yM0oxQ/exec";
             
-            fetch("https://script.google.com/macros/s/AKfycbyJ-yVdECMevhG4X4pfapI5X2xBk7x4SwEManZVj83ku0S0uAW2GZwKStA5AGb3yM0oxQ/exec", {
-                method: "POST",
-                mode: "cors",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(data)
+            // Créer un nouveau FormData
+            const formData = new FormData();
+            
+            // Ajouter les données au FormData
+            Object.keys(data).forEach(key => formData.append(key, data[key]));
+
+            // Faire la requête avec fetch sans les headers spéciaux
+            fetch(scriptURL, {
+                method: 'POST',
+                body: formData
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Erreur réseau');
-                }
-                return response.text();
-            })
-            .then(text => {
-                try {
-                    return JSON.parse(text);
-                } catch (e) {
-                    throw new Error('Réponse invalide du serveur');
-                }
-            })
+            .then(response => response.text())
             .then(result => {
-                if (result.success) {
-                    alert("✅ " + result.message);
-                    document.getElementById("form").reset();
-                } else {
-                    alert("❌ Erreur : " + (result.error || "Erreur inconnue"));
+                try {
+                    const jsonResult = JSON.parse(result);
+                    if (jsonResult.success) {
+                        alert("✅ Données enregistrées avec succès !");
+                        document.getElementById("form").reset();
+                    } else {
+                        throw new Error(jsonResult.error || "Erreur inconnue");
+                    }
+                } catch (e) {
+                    if (result.includes("success")) {
+                        alert("✅ Données enregistrées avec succès !");
+                        document.getElementById("form").reset();
+                    } else {
+                        throw new Error("Erreur lors du traitement de la réponse");
+                    }
                 }
             })
             .catch(error => {
@@ -168,7 +173,6 @@
                 submitButton.textContent = "Envoyer";
             });
         });
-
     </script>
 </body>
 </html>

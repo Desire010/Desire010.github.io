@@ -1,6 +1,6 @@
-
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +12,7 @@
             padding: 0;
             font-family: Arial, sans-serif;
         }
+
         body {
             display: flex;
             justify-content: center;
@@ -19,6 +20,7 @@
             height: 100vh;
             background-color: #f4f4f4;
         }
+
         .form-container {
             background: white;
             padding: 30px;
@@ -27,10 +29,12 @@
             width: 350px;
             text-align: center;
         }
+
         h2 {
             margin-bottom: 20px;
             color: #333;
         }
+
         input {
             width: 100%;
             padding: 10px;
@@ -39,10 +43,12 @@
             border-radius: 5px;
             font-size: 16px;
         }
+
         input:focus {
             border-color: #007bff;
             outline: none;
         }
+
         button {
             width: 100%;
             padding: 12px;
@@ -54,12 +60,19 @@
             cursor: pointer;
             transition: background 0.3s;
         }
+
         button:hover {
             background: #0056b3;
         }
+
+        .message {
+            margin-top: 15px;
+        }
     </style>
 </head>
+
 <body>
+
     <div class="form-container">
         <h2>Formulaire d'Enregistrement</h2>
         <form id="form">
@@ -69,31 +82,51 @@
             <input type="tel" id="telephone" placeholder="Téléphone" required>
             <button type="submit">Envoyer</button>
         </form>
+        <p id="message" class="message"></p>
     </div>
+
     <script>
-        document.getElementById("form").addEventListener("submit", function(event) {
+        document.getElementById("form").addEventListener("submit", async function (event) {
             event.preventDefault();
-            const data = {
-                nom: document.getElementById("nom").value,
-                prenom: document.getElementById("prenom").value,
-                email: document.getElementById("email").value,
-                telephone: document.getElementById("telephone").value
-            };
-            
-            fetch("https://script.google.com/macros/s/AKfycbwE2ySErSi0fyTD_TPGba7ndmC2x-IpnWgNJbZ_vvATUqUVcsprmmDuObyIs63GwIzdtA/exec", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    nom: document.getElementById("nom").value,
-                    prenom: document.getElementById("prenom").value,
-                    email: document.getElementById("email").value,
-                    telephone: document.getElementById("telephone").value
-                })
-            })
-            .then(response => response.text())
-            .then(data => alert("Données enregistrées !"))
-            .catch(error => alert("Erreur : " + error));
+
+            const nom = document.getElementById("nom").value.trim();
+            const prenom = document.getElementById("prenom").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const telephone = document.getElementById("telephone").value.trim();
+            const message = document.getElementById("message");
+
+            // Validation de l'email et du téléphone
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const phoneRegex = /^\+?\d{8,15}$/;
+
+            if (!emailRegex.test(email)) {
+                message.textContent = "❌ Email invalide.";
+                return;
+            }
+
+            if (!phoneRegex.test(telephone)) {
+                message.textContent = "❌ Téléphone invalide.";
+                return;
+            }
+
+            const data = { nom, prenom, email, telephone };
+
+            try {
+                const response = await fetch("VOTRE_URL_WEB_APP", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.text();
+                message.textContent = "✅ " + result;
+                document.getElementById("form").reset();
+            } catch (error) {
+                message.textContent = "❌ Erreur : " + error.message;
+            }
         });
     </script>
+
 </body>
+
 </html>

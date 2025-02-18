@@ -114,15 +114,15 @@
         <form id="registrationForm" novalidate>
             <div class="form-group">
                 <input type="text" id="nom" name="nom" placeholder="Nom" required
-                       pattern="^[A-Za-zÀ-ÿ\s'-]{2,50}$"
-                       title="2 à 50 caractères, lettres et tirets uniquement">
+                    pattern="[A-Za-zÀ-ÿ\s\-']{2,50}"
+                    title="2 à 50 caractères, lettres et tirets uniquement">
                 <div class="error-message">Veuillez entrer un nom valide</div>
             </div>
             
             <div class="form-group">
                 <input type="text" id="prenom" name="prenom" placeholder="Prénom" required
-                       pattern="^[A-Za-zÀ-ÿ\s'-]{2,50}$"
-                       title="2 à 50 caractères, lettres et tirets uniquement">
+                    pattern="[A-Za-zÀ-ÿ\s\-']{2,50}"
+                    title="2 à 50 caractères, lettres et tirets uniquement">
                 <div class="error-message">Veuillez entrer un prénom valide</div>
             </div>
             
@@ -133,7 +133,7 @@
             
             <div class="form-group">
                 <input type="text" id="quartier" name="quartier" placeholder="Quartier" required
-                       minlength="2" maxlength="100">
+                       >
                 <div class="error-message">Veuillez entrer un quartier valide (2 à 100 caractères)</div>
             </div>
             
@@ -202,10 +202,11 @@
                     formData.append('quartier', form.quartier.value.trim());
                     formData.append('telephone', '+225' + form.telephone.value.trim());
                     
-                    const response = await fetch('https://script.google.com/macros/s/AKfycbzR7lFO2UrlswLSwJqDEajbBBJcdfPY_X2P3OinPRPieYBmxv8ltfmm_gFZstSOK5mReA/exec', {
+                    const response = await fetch('https://script.google.com/macros/s/AKfycbyJ-yVdECMevhG4X4pfapI5X2xBk7x4SwEManZVj83ku0S0uAW2GZwKStA5AGb3yM0oxQ/exec', {
                         method: 'POST',
+                        mode: 'cors',
                         headers: {
-                            "Content-Type": "application/json"
+                            'Content-Type': 'application/json',
                         },
                         body: JSON.stringify({
                             nom: form.nom.value.trim(),

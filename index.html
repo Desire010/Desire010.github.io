@@ -153,61 +153,86 @@
     </div>
 
     <script>
-        form.addEventListener('submit', async function(event) {
-            event.preventDefault();
-            
-            // Valider tous les champs
-            let isValid = true;
-            form.querySelectorAll('input').forEach(input => {
-                validateInput(input);
-                if (!input.validity.valid) isValid = false;
-            });
-            
-            if (!isValid) return;
-            
-            const submitButton = form.querySelector('button[type="submit"]');
-            submitButton.disabled = true;
-            submitButton.textContent = "Envoi en cours...";
-            successMessage.style.display = 'none';
-            
-            try {
-                // Créer l'objet de données
-                const requestData = {
-                    nom: form.nom.value.trim(),
-                    prenom: form.prenom.value.trim(),
-                    email: form.email.value.trim(),
-                    quartier: form.quartier.value.trim(),
-                    telephone: "+225" + form.telephone.value.trim()
-                };
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('registrationForm');
+            const successMessage = document.querySelector('.success-message');
         
-                // Convertir l'objet en chaîne de requête
-                const formBody = Object.keys(requestData).map(key => 
-                    encodeURIComponent(key) + '=' + encodeURIComponent(requestData[key])
-                ).join('&');
-        
-                const response = await fetch('VOTRE_URL_GOOGLE_SCRIPT', {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: formBody
-                });
-        
-                // Réinitialiser le formulaire et afficher le message de succès
-                form.reset();
-                successMessage.style.display = 'block';
-                setTimeout(() => {
-                    successMessage.style.display = 'none';
-                }, 5000);
+            function validateInput(input) {
+                const errorMessage = input.parentElement.querySelector('.error-message') ||
+                                   input.parentElement.parentElement.querySelector('.error-message');
                 
-            } catch (error) {
-                alert('❌ Erreur lors de l\'envoi du formulaire. Veuillez réessayer.');
-                console.error(error);
-            } finally {
-                submitButton.disabled = false;
-                submitButton.textContent = "Envoyer";
+                if (input.validity.valid) {
+                    errorMessage.style.display = 'none';
+                    input.style.borderColor = '#ddd';
+                } else {
+                    errorMessage.style.display = 'block';
+                    input.style.borderColor = '#dc3545';
+                }
             }
+        
+            form.addEventListener('submit', async function(event) {
+                event.preventDefault();
+                
+                // Valider tous les champs
+                let isValid = true;
+                form.querySelectorAll('input').forEach(input => {
+                    validateInput(input);
+                    if (!input.validity.valid) isValid = false;
+                });
+                
+                if (!isValid) return;
+                
+                const submitButton = form.querySelector('button[type="submit"]');
+                submitButton.disabled = true;
+                submitButton.textContent = "Envoi en cours...";
+                successMessage.style.display = 'none';
+                
+                try {
+                    // Créer l'objet de données
+                    const requestData = {
+                        nom: form.nom.value.trim(),
+                        prenom: form.prenom.value.trim(),
+                        email: form.email.value.trim(),
+                        quartier: form.quartier.value.trim(),
+                        telephone: "+225" + form.telephone.value.trim()
+                    };
+        
+                    // Convertir l'objet en chaîne de requête
+                    const formBody = Object.keys(requestData).map(key => 
+                        encodeURIComponent(key) + '=' + encodeURIComponent(requestData[key])
+                    ).join('&');
+        
+                    const response = await fetch('VOTRE_URL_GOOGLE_SCRIPT', {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: formBody
+                    });
+        
+                    // Réinitialiser le formulaire et afficher le message de succès
+                    form.reset();
+                    successMessage.style.display = 'block';
+                    setTimeout(() => {
+                        successMessage.style.display = 'none';
+                    }, 5000);
+                    
+                } catch (error) {
+                    alert('❌ Erreur lors de l\'envoi du formulaire. Veuillez réessayer.');
+                    console.error(error);
+                } finally {
+                    submitButton.disabled = false;
+                    submitButton.textContent = "Envoyer";
+                }
+            });
+        
+            // Validation en temps réel
+            form.querySelectorAll('input').forEach(input => {
+                input.addEventListener('input', function() {
+                    validateInput(this);
+                });
+            });
         });
     </script>
 </body>

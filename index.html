@@ -136,6 +136,7 @@
             const prenom = document.getElementById("prenom").value.trim();
             const email = document.getElementById("email").value.trim();
             const profession = document.getElementById("profession").value.trim();
+            console.log(profession);
             const quartier = document.getElementById("quartier").value.trim();
             const telephone = document.getElementById("telephone").value.trim();
             
@@ -157,6 +158,7 @@
             }
 
             const data = { nom, prenom, email, profession, quartier, telephone };
+            console.log(data);
 
             try {
                 await fetch("https://script.google.com/macros/s/AKfycbzR7lFO2UrlswLSwJqDEajbBBJcdfPY_X2P3OinPRPieYBmxv8ltfmm_gFZstSOK5mReA/exec", {

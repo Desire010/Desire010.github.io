@@ -203,19 +203,19 @@
                     formData.append('telephone', '+225' + form.telephone.value.trim());
                     
                     const response = await fetch('https://script.google.com/macros/s/AKfycbyJ-yVdECMevhG4X4pfapI5X2xBk7x4SwEManZVj83ku0S0uAW2GZwKStA5AGb3yM0oxQ/exec', {
-                        method: 'POST',
-                        mode: 'cors',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            nom: form.nom.value.trim(),
-                            prenom: form.prenom.value.trim(),
-                            email: form.email.value.trim(),
-                            quartier: form.quartier.value.trim(),
-                            telephone: "+225" + form.telephone.value.trim()
-                        })
-                    });
+                           method: 'POST',
+                            mode: 'no-cors',
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                nom: form.nom.value.trim(),
+                                prenom: form.prenom.value.trim(),
+                                email: form.email.value.trim(),
+                                quartier: form.quartier.value.trim(),
+                                telephone: "+225" + form.telephone.value.trim()
+                            })
+                        });
                     
                     const result = await response.text();
                     

@@ -109,7 +109,7 @@
 </head>
 <body>
     <div class="form-container">
-        <img src="JADAR.jpeg" alt="JADAR Akouedo Rehoboth" class="logo">
+        <img src="JADAR.jpeg" alt="Logo JADAR Akouedo Rehoboth" class="logo">
         <h2>Formulaire d'Enregistrement</h2>
         <form id="registrationForm" novalidate>
             <div class="form-group">
@@ -118,25 +118,25 @@
                     title="2 à 50 caractères, lettres et tirets uniquement">
                 <div class="error-message">Veuillez entrer un nom valide</div>
             </div>
-            
+
             <div class="form-group">
                 <input type="text" id="prenom" name="prenom" placeholder="Prénom" required
                     pattern="[A-Za-zÀ-ÿ\s\-']{2,50}"
                     title="2 à 50 caractères, lettres et tirets uniquement">
                 <div class="error-message">Veuillez entrer un prénom valide</div>
             </div>
-            
+
             <div class="form-group">
                 <input type="email" id="email" name="email" placeholder="Email" required>
                 <div class="error-message">Veuillez entrer une adresse email valide</div>
             </div>
-            
+
             <div class="form-group">
-                <input type="text" id="quartier" name="quartier" placeholder="Quartier" required
-                       >
-                <div class="error-message">Veuillez entrer un quartier valide (2 à 100 caractères)</div>
+                <input type="text" id="quartier" name="quartier" placeholder="Quartier" required minlength="2" maxlength="100"
+                       title="2 à 100 caractères">
+                <div class="error-message">Veuillez entrer un quartier valide</div>
             </div>
-            
+
             <div class="form-group">
                 <div class="phone-input">
                     <span class="phone-prefix">+225</span>
@@ -146,93 +146,48 @@
                 </div>
                 <div class="error-message">Veuillez entrer un numéro de téléphone valide (10 chiffres)</div>
             </div>
-            
+
             <button type="submit">Envoyer</button>
         </form>
         <div class="success-message">✅ Données enregistrées avec succès !</div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('registrationForm');
-            const successMessage = document.querySelector('.success-message');
-        
-            function validateInput(input) {
-                const errorMessage = input.parentElement.querySelector('.error-message') ||
-                                   input.parentElement.parentElement.querySelector('.error-message');
-                
-                if (input.validity.valid) {
-                    errorMessage.style.display = 'none';
-                    input.style.borderColor = '#ddd';
-                } else {
-                    errorMessage.style.display = 'block';
-                    input.style.borderColor = '#dc3545';
-                }
+        document.getElementById('registrationForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            let form = event.target;
+            let successMessage = document.querySelector('.success-message');
+            let submitButton = form.querySelector('button');
+
+            let requestData = {
+                nom: form.nom.value.trim(),
+                prenom: form.prenom.value.trim(),
+                email: form.email.value.trim(),
+                quartier: form.quartier.value.trim(),
+                telephone: "+225" + form.telephone.value.trim()
+            };
+
+            submitButton.disabled = true;
+            submitButton.textContent = "Envoi en cours...";
+
+            try {
+                let response = await fetch('https://script.google.com/macros/s/AKfycbzR7lFO2UrlswLSwJqDEajbBBJcdfPY_X2P3OinPRPieYBmxv8ltfmm_gFZstSOK5mReA/exec', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestData)
+                });
+
+                console.log(await response.text());
+                form.reset();
+                successMessage.style.display = 'block';
+                setTimeout(() => { successMessage.style.display = 'none'; }, 5000);
+            } catch (error) {
+                alert('❌ Erreur lors de l\'envoi du formulaire.');
+                console.error(error);
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = "Envoyer";
             }
-        
-            form.addEventListener('submit', async function(event) {
-                event.preventDefault();
-                
-                // Valider tous les champs
-                let isValid = true;
-                form.querySelectorAll('input').forEach(input => {
-                    validateInput(input);
-                    if (!input.validity.valid) isValid = false;
-                });
-                
-                if (!isValid) return;
-                
-                const submitButton = form.querySelector('button[type="submit"]');
-                submitButton.disabled = true;
-                submitButton.textContent = "Envoi en cours...";
-                successMessage.style.display = 'none';
-                
-                try {
-                    // Créer l'objet de données
-                    const requestData = {
-                        nom: form.nom.value.trim(),
-                        prenom: form.prenom.value.trim(),
-                        email: form.email.value.trim(),
-                        quartier: form.quartier.value.trim(),
-                        telephone: "+225" + form.telephone.value.trim()
-                    };
-        
-                    // Convertir l'objet en chaîne de requête
-                    const formBody = Object.keys(requestData).map(key => 
-                        encodeURIComponent(key) + '=' + encodeURIComponent(requestData[key])
-                    ).join('&');
-        
-                    const response = await fetch('VOTRE_URL_GOOGLE_SCRIPT', {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: formBody
-                    });
-        
-                    // Réinitialiser le formulaire et afficher le message de succès
-                    form.reset();
-                    successMessage.style.display = 'block';
-                    setTimeout(() => {
-                        successMessage.style.display = 'none';
-                    }, 5000);
-                    
-                } catch (error) {
-                    alert('❌ Erreur lors de l\'envoi du formulaire. Veuillez réessayer.');
-                    console.error(error);
-                } finally {
-                    submitButton.disabled = false;
-                    submitButton.textContent = "Envoyer";
-                }
-            });
-        
-            // Validation en temps réel
-            form.querySelectorAll('input').forEach(input => {
-                input.addEventListener('input', function() {
-                    validateInput(this);
-                });
-            });
         });
     </script>
 </body>

@@ -153,88 +153,61 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('registrationForm');
-            const successMessage = document.querySelector('.success-message');
+        form.addEventListener('submit', async function(event) {
+            event.preventDefault();
             
-            // Validation en temps réel
+            // Valider tous les champs
+            let isValid = true;
             form.querySelectorAll('input').forEach(input => {
-                input.addEventListener('input', function() {
-                    validateInput(this);
-                });
+                validateInput(input);
+                if (!input.validity.valid) isValid = false;
             });
             
-            function validateInput(input) {
-                const errorMessage = input.parentElement.querySelector('.error-message') ||
-                                   input.parentElement.parentElement.querySelector('.error-message');
+            if (!isValid) return;
+            
+            const submitButton = form.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.textContent = "Envoi en cours...";
+            successMessage.style.display = 'none';
+            
+            try {
+                // Créer l'objet de données
+                const requestData = {
+                    nom: form.nom.value.trim(),
+                    prenom: form.prenom.value.trim(),
+                    email: form.email.value.trim(),
+                    quartier: form.quartier.value.trim(),
+                    telephone: "+225" + form.telephone.value.trim()
+                };
+        
+                // Convertir l'objet en chaîne de requête
+                const formBody = Object.keys(requestData).map(key => 
+                    encodeURIComponent(key) + '=' + encodeURIComponent(requestData[key])
+                ).join('&');
+        
+                const response = await fetch('VOTRE_URL_GOOGLE_SCRIPT', {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: formBody
+                });
+        
+                // Réinitialiser le formulaire et afficher le message de succès
+                form.reset();
+                successMessage.style.display = 'block';
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 5000);
                 
-                if (input.validity.valid) {
-                    errorMessage.style.display = 'none';
-                    input.style.borderColor = '#ddd';
-                } else {
-                    errorMessage.style.display = 'block';
-                    input.style.borderColor = '#dc3545';
-                }
+            } catch (error) {
+                alert('❌ Erreur lors de l\'envoi du formulaire. Veuillez réessayer.');
+                console.error(error);
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = "Envoyer";
             }
-            
-            form.addEventListener('submit', async function(event) {
-                event.preventDefault();
-                
-                // Valider tous les champs
-                let isValid = true;
-                form.querySelectorAll('input').forEach(input => {
-                    validateInput(input);
-                    if (!input.validity.valid) isValid = false;
-                });
-                
-                if (!isValid) return;
-                
-                const submitButton = form.querySelector('button[type="submit"]');
-                submitButton.disabled = true;
-                submitButton.textContent = "Envoi en cours...";
-                successMessage.style.display = 'none';
-                
-                try {
-                    const formData = new FormData();
-                    formData.append('nom', form.nom.value.trim());
-                    formData.append('prenom', form.prenom.value.trim());
-                    formData.append('email', form.email.value.trim());
-                    formData.append('quartier', form.quartier.value.trim());
-                    formData.append('telephone', '+225' + form.telephone.value.trim());
-                    
-                    const response = await fetch('https://script.google.com/macros/s/AKfycbyJ-yVdECMevhG4X4pfapI5X2xBk7x4SwEManZVj83ku0S0uAW2GZwKStA5AGb3yM0oxQ/exec', {
-                           method: 'POST',
-                            mode: 'no-cors',
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify({
-                                nom: form.nom.value.trim(),
-                                prenom: form.prenom.value.trim(),
-                                email: form.email.value.trim(),
-                                quartier: form.quartier.value.trim(),
-                                telephone: "+225" + form.telephone.value.trim()
-                            })
-                        });
-                    
-                    const result = await response.text();
-                    
-                    if (result.includes('success')) {
-                        form.reset();
-                        successMessage.style.display = 'block';
-                        setTimeout(() => {
-                            successMessage.style.display = 'none';
-                        }, 5000);
-                    } else {
-                        throw new Error('Erreur lors de l\'enregistrement');
-                    }
-                } catch (error) {
-                    alert('❌ Erreur : ' + error.message);
-                } finally {
-                    submitButton.disabled = false;
-                    submitButton.textContent = "Envoyer";
-                }
-            });
         });
     </script>
 </body>

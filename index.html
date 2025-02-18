@@ -173,9 +173,18 @@
             try {
                 let response = await fetch('https://script.google.com/macros/s/AKfycbzR7lFO2UrlswLSwJqDEajbBBJcdfPY_X2P3OinPRPieYBmxv8ltfmm_gFZstSOK5mReA/exec', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(requestData)
-                });
+                        mode: 'cors',  // CHANGÉ
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            nom: form.nom.value.trim(),
+                            prenom: form.prenom.value.trim(),
+                            email: form.email.value.trim(),
+                            quartier: form.quartier.value.trim(),
+                            telephone: "+225" + form.telephone.value.trim()
+                        })
+                    });
 
                 console.log(await response.text());
                 form.reset();

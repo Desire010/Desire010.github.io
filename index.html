@@ -174,19 +174,6 @@
             const secteur = document.getElementById("secteur").value.trim();
             const message = document.getElementById("message");
 
-            // Validation de l'email et du téléphone
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            const phoneRegex = /^\+?\d{8,15}$/;
-
-            if (!emailRegex.test(email)) {
-                message.textContent = "❌ Email invalide.";
-                return;
-            }
-
-            if (!phoneRegex.test(telephone)) {
-                message.textContent = "❌ Téléphone invalide.";
-                return;
-            }
 
             const data = { nom, prenom, contact1, contact2, quartier, departement, profession, secteur };
 

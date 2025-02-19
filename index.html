@@ -42,7 +42,7 @@
         .form-group {
             margin-bottom: 15px;
         }
-        input {
+        input, select {
             width: 100%;
             padding: 12px;
             border: 2px solid #ddd;
@@ -50,7 +50,7 @@
             font-size: 16px;
             transition: border-color 0.3s, box-shadow 0.3s;
         }
-        input:focus {
+        input:focus, select:focus {
             border-color: #007bff;
             outline: none;
             box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
@@ -106,13 +106,30 @@
                 <input type="text" id="quartier" placeholder="Quartier" required>
             </div>
             <div class="form-group">
-                <input type="text" id="departement" placeholder="Département" required>
+                <select id="departement" required>
+                    <option value="">Sélectionnez un département</option>
+                    <option>Groupe de Louange et d'Adoration</option>
+                    <option>Chorale</option>
+                    <option>Protocole</option>
+                    <option>GEEAD</option>
+                    <option>Bureau de la JADAR</option>
+                    <option>MIFA</option>
+                    <option>AMADCI</option>
+                    <option>AOC</option>
+                    <option>Aucun</option>
+                </select>
             </div>
             <div class="form-group">
                 <input type="text" id="profession" placeholder="Profession ou Formation" required>
             </div>
             <div class="form-group">
-                <input type="text" id="secteur" placeholder="Secteur d'activité ou domaine de formation" required>
+                <select id="secteur" required>
+                    <option value="">Sélectionnez un secteur</option>
+                    <option>RH</option>
+                    <option>Marketing</option>
+                    <option>Vente</option>
+                    <option>Informatique</option>
+                </select>
             </div>
             <button type="submit" id="submit-button">Envoyer</button>
         </form>
@@ -123,90 +140,51 @@
         const form = document.getElementById("form");
         const button = document.getElementById("submit-button");
         const message = document.getElementById("message");
-        const inputs = form.querySelectorAll("input");
-        const telephoneInput = document.getElementById("telephone");
-        
-        telephoneInput.addEventListener("input", () => {
-            if (!telephoneInput.value.startsWith("+225")) {
-                telephoneInput.value = "+225";
-            }
-        });
+        const phoneRegex = /^\+225\d{10}$/;
 
         form.addEventListener("submit", async function (event) {
             event.preventDefault();
-        
+
             button.disabled = true;
             button.textContent = "Envoi en cours...";
-            
-            const nom = document.getElementById("nom").value.trim();
-            const prenom = document.getElementById("prenom").value.trim();
-            const contact1 = document.getElementById("contact1").value.trim();
-            const contact2 = document.getElementById("contact2").value.trim();
-            const quartier = document.getElementById("quartier").value.trim();
-            const departement = document.getElementById("departement").value.trim();
-            const profession = document.getElementById("profession").value.trim();
-            const secteur = document.getElementById("secteur").value.trim();
-            
-            const phoneRegex = /^\+225\d{8,12}$/;
-        
-            if (!phoneRegex.test(contact1)) {
-                message.textContent = "❌ Contact 1 invalide.";
+
+            const data = {};
+            let isValid = true;
+            form.querySelectorAll("input, select").forEach(input => {
+                data[input.id] = input.value.trim();
+                if (!input.value.trim()) {
+                    isValid = false;
+                }
+            });
+
+            if (!phoneRegex.test(data.contact1)) {
+                message.textContent = "❌ Contact 1 invalide (Format: +225XXXXXXXXXX).";
+                isValid = false;
+            }
+            if (!phoneRegex.test(data.contact2)) {
+                message.textContent = "❌ Contact 2 invalide (Format: +225XXXXXXXXXX).";
+                isValid = false;
+            }
+            if (!isValid) {
                 button.disabled = false;
                 button.textContent = "Envoyer";
                 return;
             }
-        
-            if (!phoneRegex.test(contact2)) {
-                message.textContent = "❌ Contact 2 (WhatsApp) invalide.";
-                button.disabled = false;
-                button.textContent = "Envoyer";
-                return;
-            }
-        
-            const data = { 
-                nom, 
-                prenom, 
-                contact1, 
-                contact2, 
-                quartier, 
-                departement, 
-                profession, 
-                secteur 
-            };
-            console.log(data);
-        
+
             try {
                 await fetch("https://script.google.com/macros/s/AKfycbwRuTyMbuJki7Sz_AK-gmlJYAUbPdV6zGqYNnvK53_S8d8DsLrhjRC4RmHvqvNZOVB-eQ/exec", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    mode: "no-cors",
                     body: JSON.stringify(data)
                 });
-        
                 message.textContent = "✅ Enregistré avec succès !";
+                message.style.color = "green";
                 form.reset();
             } catch (error) {
                 message.textContent = "❌ Erreur : " + error.message;
             }
-        
             button.disabled = false;
             button.textContent = "Envoyer";
-        });
-        
-        // Ajout du préfixe +225 automatiquement pour les deux champs de contact
-        const contact1Input = document.getElementById("contact1");
-        const contact2Input = document.getElementById("contact2");
-        
-        contact1Input.addEventListener("input", () => {
-            if (!contact1Input.value.startsWith("+225")) {
-                contact1Input.value = "+225";
-            }
-        });
-        
-        contact2Input.addEventListener("input", () => {
-            if (!contact2Input.value.startsWith("+225")) {
-                contact2Input.value = "+225";
-            }
         });
     </script>
 

@@ -41,28 +41,18 @@
         }
         .form-group {
             margin-bottom: 15px;
+            position: relative;
         }
-        .phone-input {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .phone-prefix {
-            background: #f4f4f4;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            color: #333;
-        }
-        input {
+        input, select {
             width: 100%;
             padding: 12px;
             border: 2px solid #ddd;
             border-radius: 5px;
             font-size: 16px;
             transition: border-color 0.3s, box-shadow 0.3s;
+            height: 45px;
         }
-        input:focus {
+        input:focus, select:focus {
             border-color: #007bff;
             outline: none;
             box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
@@ -75,6 +65,9 @@
             font-size: 14px;
             margin-top: 5px;
             display: none;
+            position: absolute;
+            bottom: -20px;
+            left: 0;
         }
         button {
             width: 100%;
@@ -86,6 +79,8 @@
             font-size: 16px;
             cursor: pointer;
             transition: background 0.3s, transform 0.1s;
+            height: 45px;
+            position: relative;
         }
         button:hover {
             background: #0056b3;
@@ -98,18 +93,46 @@
             cursor: not-allowed;
         }
         .success-message {
-            display: none;
             color: #28a745;
             margin-top: 15px;
             padding: 10px;
             border-radius: 5px;
             background: #d4edda;
         }
+        
+        /* Style pour le spinner de chargement */
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        @keyframes spin {
+            to {
+                transform: translateY(-50%) rotate(360deg);
+            }
+        }
+        
+        /* Style pour le texte du bouton pendant le chargement */
+        button.loading {
+            padding-right: 40px; /* Espace pour le spinner */
+        }
+        
+        button.loading .spinner {
+            display: block;
+        }
     </style>
 </head>
 
 <body>
-
     <div class="form-container">
         <img src="JADAR.jpeg" alt="JADAR Akouedo Rehoboth" class="logo">
         <h2>Formulaire d'Enregistrement</h2>
@@ -121,10 +144,12 @@
                 <input type="text" id="prenom" placeholder="Prénom" required>
             </div>
             <div class="form-group">
-                <input type="tel" id="contact1" placeholder="+225 Contact 1" required>
+                <input type="tel" id="contact1" placeholder="+225 Contact 1" required pattern="^\+225[0-9]{10}$">
+                <span class="error-message" id="contact1-error">Le numéro doit commencer par +225 suivi de 10 chiffres</span>
             </div>
             <div class="form-group">
-                <input type="tel" id="contact2" placeholder="+225 Contact 2 (WhatsApp)" required>
+                <input type="tel" id="contact2" placeholder="+225 Contact 2 (WhatsApp)" required pattern="^\+225[0-9]{10}$">
+                <span class="error-message" id="contact2-error">Le numéro doit commencer par +225 suivi de 10 chiffres</span>
             </div>
             <div class="form-group">
                 <input type="text" id="quartier" placeholder="Quartier" required>
@@ -155,14 +180,47 @@
                     <option>Informatique</option>
                 </select>
             </div>
-            <button type="submit">Envoyer</button>
+            <button type="submit">
+                Envoyer
+                <div class="spinner"></div>
+            </button>
         </form>
         <p id="message" class="message"></p>
     </div>
 
     <script>
+        // Fonction pour valider le format du numéro de téléphone
+        function validatePhoneNumber(input) {
+            const isValid = /^\+225[0-9]{10}$/.test(input.value);
+            const errorElement = document.getElementById(input.id + '-error');
+            
+            if (!isValid) {
+                errorElement.style.display = 'block';
+                input.setCustomValidity('Format invalide');
+            } else {
+                errorElement.style.display = 'none';
+                input.setCustomValidity('');
+            }
+        }
+
+        // Ajouter les écouteurs d'événements pour la validation
+        document.getElementById('contact1').addEventListener('input', function() {
+            validatePhoneNumber(this);
+        });
+
+        document.getElementById('contact2').addEventListener('input', function() {
+            validatePhoneNumber(this);
+        });
+
         document.getElementById("form").addEventListener("submit", async function (event) {
             event.preventDefault();
+
+            const submitButton = this.querySelector('button[type="submit"]');
+            const buttonText = submitButton.textContent.trim();
+            
+            // Désactiver le bouton et afficher le spinner
+            submitButton.disabled = true;
+            submitButton.classList.add('loading');
 
             const nom = document.getElementById("nom").value.trim();
             const prenom = document.getElementById("prenom").value.trim();
@@ -174,6 +232,15 @@
             const secteur = document.getElementById("secteur").value.trim();
             const message = document.getElementById("message");
 
+            // Valider les numéros de téléphone avant l'envoi
+            if (!/^\+225[0-9]{10}$/.test(contact1) || !/^\+225[0-9]{10}$/.test(contact2)) {
+                message.textContent = "❌ Les numéros de téléphone sont invalides";
+                message.className = "error-message";
+                // Réactiver le bouton en cas d'erreur
+                submitButton.disabled = false;
+                submitButton.classList.remove('loading');
+                return;
+            }
 
             const data = { nom, prenom, contact1, contact2, quartier, departement, profession, secteur };
 
@@ -187,13 +254,17 @@
 
                 const result = await response.text();
                 message.textContent = "✅ " + result;
+                message.className = "success-message";
                 document.getElementById("form").reset();
             } catch (error) {
                 message.textContent = "❌ Erreur : " + error.message;
+                message.className = "error-message";
+            } finally {
+                // Réactiver le bouton et cacher le spinner
+                submitButton.disabled = false;
+                submitButton.classList.remove('loading');
             }
         });
     </script>
-
 </body>
-
 </html>

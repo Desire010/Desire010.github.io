@@ -151,9 +151,34 @@
                 <input type="tel" id="contact2" placeholder="+225 Contact 2 (WhatsApp)" required pattern="^\+225[0-9]{10}$">
                 <span class="error-message" id="contact2-error">Le numéro doit commencer par +225 suivi de 10 chiffres</span>
             </div>
+             <div class="form-group">
+                <input type="text" id="jour_mois_naiss" placeholder="jour_mois_naiss" required>
+            </div>
+             <div class="form-group">
+                <input type="text" id="famille_jeun" placeholder="famille_jeun" required>
+            </div>
             <div class="form-group">
                 <input type="text" id="quartier" placeholder="Quartier" required>
             </div>
+            <div class="form-group">
+                <select id="situ_mat" required>
+                    <option value="">Sélectionnez votre situation</option>
+                    <option>Célibataire</option>
+                    <option>Marié(e)</option>
+                    <option>Baptisé d'eau et du Saint-Esprit</option>
+                    <option>Veuf(ve)</option>
+                    <option>Fiancé(e)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <select id="situ_spirit" required>
+                    <option value="">Sélectionnez votre spirituel</option>
+                    <option>Baptisé d'eau</option>
+                    <option>Baptisé du Saint-Esprit</option>
+                    <option>Baptisé d'eau et du Saint-Esprit</option>
+                    <option>Pas baptisé </option>
+                </select>
+            </div
             <div class="form-group">
                 <select id="departement" required>
                     <option value="">Sélectionnez un département</option>

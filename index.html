@@ -40,7 +40,7 @@
             color: #333;
         }
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 25px; /* Augmenté pour l'espacement des messages d'erreur */
             position: relative;
         }
         input, select {
@@ -51,6 +51,17 @@
             font-size: 16px;
             transition: border-color 0.3s, box-shadow 0.3s;
             height: 45px;
+            background-color: #fff;
+            color: #333;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+        select {
+            padding-right: 30px; /* Espace pour la flèche */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23333' viewBox='0 0 16 16'%3E%3Cpath d='M8 11l-6-6h12l-6 6z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
         }
         input:focus, select:focus {
             border-color: #007bff;
@@ -71,7 +82,7 @@
         }
         button {
             width: 100%;
-            padding: 14px;
+            padding: 12px;
             background: #007bff;
             color: white;
             border: none;
@@ -99,8 +110,6 @@
             border-radius: 5px;
             background: #d4edda;
         }
-        
-        /* Style pour le spinner de chargement */
         .spinner {
             display: none;
             width: 20px;
@@ -114,18 +123,14 @@
             top: 50%;
             transform: translateY(-50%);
         }
-        
         @keyframes spin {
             to {
                 transform: translateY(-50%) rotate(360deg);
             }
         }
-        
-        /* Style pour le texte du bouton pendant le chargement */
         button.loading {
-            padding-right: 40px; /* Espace pour le spinner */
+            padding-right: 40px;
         }
-        
         button.loading .spinner {
             display: block;
         }

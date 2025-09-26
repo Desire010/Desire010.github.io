@@ -40,7 +40,7 @@
             color: #333;
         }
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 25px; /* Augmenté pour l'espacement des messages d'erreur */
             position: relative;
         }
         input, select {
@@ -58,55 +58,12 @@
             appearance: none;
         }
         select {
-            padding-right: 30px;
+            padding-right: 30px; /* Espace pour la flèche */
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23333' viewBox='0 0 16 16'%3E%3Cpath d='M8 11l-6-6h12l-6 6z'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: right 10px center;
         }
-        
-        /* Styles pour la sélection multiple des départements */
-        .departments-container {
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            padding: 10px;
-            text-align: left;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-        .departments-container h4 {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-        .checkbox-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-        .checkbox-item input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            margin-right: 8px;
-        }
-        .checkbox-item label {
-            cursor: pointer;
-        }
-        .selected-departments {
-            margin-top: 5px;
-            font-size: 12px;
-            color: #666;
-        }
-        
-        /* Label pour champ optionnel */
-        .optional-label {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 5px;
-            text-align: left;
-        }
-        
-        input:focus, select:focus, .departments-container:focus {
+        input:focus, select:focus {
             border-color: #007bff;
             outline: none;
             box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
@@ -192,23 +149,22 @@
                 <input type="text" id="prenom" placeholder="Prénom" required>
             </div>
             <div class="form-group">
-                <input type="tel" id="contact1" placeholder="+225 Contact principal" required pattern="^\+225[0-9]{10}$">
+                <input type="tel" id="contact1" placeholder="+225 Contact 1" required pattern="^\+225[0-9]{10}$">
                 <span class="error-message" id="contact1-error">Le numéro doit commencer par +225 suivi de 10 chiffres</span>
             </div>
             <div class="form-group">
-                <div class="optional-label">Contact WhatsApp (optionnel)</div>
-                <input type="tel" id="contact2" placeholder="+225 Contact WhatsApp" pattern="^\+225[0-9]{10}$">
+                <input type="tel" id="contact2" placeholder="+225 Contact 2 (WhatsApp)" required pattern="^\+225[0-9]{10}$">
                 <span class="error-message" id="contact2-error">Le numéro doit commencer par +225 suivi de 10 chiffres</span>
             </div>
              <div class="form-group">
-                <input type="text" id="jour_mois_naiss" placeholder="Jour et mois de naissance" required>
+                <input type="text" id="jour_mois_naiss" placeholder="jour et mois de naissance" required>
             </div>
             <div class="form-group">
                 <select id="famille_jeun" required>
                     <option value="">Famille de Jeunesse</option>
                     <option>Elishama</option>
                     <option>Nérija</option>
-                    <option>El olam</option>
+                    <option> El olam</option>
                     <option>Paul</option>
                     <option>Aucune</option>
                 </select>
@@ -228,72 +184,30 @@
             </div>
             <div class="form-group">
                 <select id="situ_spirit" required>
-                    <option value="">Sélectionnez votre situation spirituelle</option>
+                    <option value="">Sélectionnez votre spirituel</option>
                     <option>Baptisé d'eau</option>
                     <option>Baptisé du Saint-Esprit</option>
                     <option>Baptisé d'eau et du Saint-Esprit</option>
-                    <option>Pas baptisé</option>
+                    <option>Pas baptisé </option>
                 </select>
             </div>
             <div class="form-group">
-                <div class="departments-container" tabindex="0">
-                    <h4>Départements (sélectionnez un ou plusieurs)</h4>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="dept_gla" value="Groupe de Louange et d'Adoration">
-                        <label for="dept_gla">Groupe de Louange et d'Adoration</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="dept_chorale" value="Chorale">
-                        <label for="dept_chorale">Chorale</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="dept_protocole" value="Protocole">
-                        <label for="dept_protocole">Protocole</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="dept_geead" value="GEEAD">
-                        <label for="dept_geead">GEEAD</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="dept_bureau" value="Bureau de la JADAR">
-                        <label for="dept_bureau">Bureau de la JADAR</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="dept_mifa" value="MIFA">
-                        <label for="dept_mifa">MIFA</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="dept_amadci" value="AMADCI">
-                        <label for="dept_amadci">AMADCI</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="dept_aoc" value="AOC">
-                        <label for="dept_aoc">AOC</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="dept_communication" value="Communication">
-                        <label for="dept_communication">Communication</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="dept_ecodim" value="ECODIM">
-                        <label for="dept_ecodim">ECODIM</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="dept_intercession" value="Intercession">
-                        <label for="dept_intercession">Intercession</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="dept_evangelisation" value="Evangelisation">
-                        <label for="dept_evangelisation">Evangelisation</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="dept_aucun" value="Aucun">
-                        <label for="dept_aucun">Aucun</label>
-                    </div>
-                </div>
-                <div class="selected-departments" id="selected-departments">
-                    Aucun département sélectionné
-                </div>
+                <select id="departement" required>
+                    <option value="">Sélectionnez un département</option>
+                    <option>Groupe de Louange et d'Adoration</option>
+                    <option>Chorale</option>
+                    <option>Protocole</option>
+                    <option>GEEAD</option>
+                    <option>Bureau de la JADAR</option>
+                    <option>MIFA</option>
+                    <option>AMADCI</option>
+                    <option>AOC</option>
+                    <option>Communication</option>
+                    <option>ECODIM</option>
+                    <option>Intercession</option>
+                    <option>Evangelisation</option>
+                    <option>Aucun</option>
+                </select>
             </div>
             <div class="form-group">
                 <input type="text" id="profession" placeholder="Profession ou Formation" required>
@@ -304,6 +218,8 @@
                     <option>RH</option>
                     <option>Marketing</option>
                     <option>Conseil en communication et marketing</option>
+                    
+                    <!-- Sciences et Industrie -->
                     <option>Chimie</option>
                     <option>Finance</option>
                     <option>Ingénierie</option>
@@ -313,6 +229,8 @@
                     <option>Industrie manufacturière</option>
                     <option>Industrie Agroalimentaire Chimie</option>
                     <option>Électronique</option>
+                    
+                    <!-- Transport et Industries spécialisées -->
                     <option>Industries du transport</option>
                     <option>Aéronautique</option>
                     <option>Naval</option>
@@ -323,6 +241,8 @@
                     <option>Imprimerie</option>
                     <option>Vente de Bijou de Luxe</option>
                     <option>Immobilier</option>
+                    
+                    <!-- Commerce et Services -->
                     <option>Commerce de détail</option>
                     <option>E-commerce</option>
                     <option>Architecture</option>
@@ -332,6 +252,8 @@
                     <option>Médecine</option>
                     <option>Activités juridiques et comptables</option>
                     <option>Conseil de gestion</option>
+                    
+                    <!-- Tourisme et Services -->
                     <option>Sécurité</option>
                     <option>Hôtellerie</option>
                     <option>Agences de voyages</option>
@@ -351,14 +273,6 @@
     <script>
         // Fonction pour valider le format du numéro de téléphone
         function validatePhoneNumber(input) {
-            // Si le champ est vide et optionnel (contact2), c'est valide
-            if (input.id === 'contact2' && input.value.trim() === '') {
-                const errorElement = document.getElementById(input.id + '-error');
-                errorElement.style.display = 'none';
-                input.setCustomValidity('');
-                return;
-            }
-            
             const isValid = /^\+225[0-9]{10}$/.test(input.value);
             const errorElement = document.getElementById(input.id + '-error');
             
@@ -370,46 +284,6 @@
                 input.setCustomValidity('');
             }
         }
-
-        // Gestion de la sélection multiple des départements
-        function updateSelectedDepartments() {
-            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-            const selectedDepartments = [];
-            
-            checkboxes.forEach(checkbox => {
-                if (checkbox.checked) {
-                    selectedDepartments.push(checkbox.value);
-                }
-            });
-            
-            const displayElement = document.getElementById('selected-departments');
-            if (selectedDepartments.length === 0) {
-                displayElement.textContent = 'Aucun département sélectionné';
-            } else {
-                displayElement.textContent = selectedDepartments.join(', ');
-            }
-        }
-
-        // Gestion de l'option "Aucun" - désélectionne les autres quand "Aucun" est sélectionné
-        document.getElementById('dept_aucun').addEventListener('change', function() {
-            if (this.checked) {
-                const otherCheckboxes = document.querySelectorAll('input[type="checkbox"]:not(#dept_aucun)');
-                otherCheckboxes.forEach(checkbox => {
-                    checkbox.checked = false;
-                });
-            }
-            updateSelectedDepartments();
-        });
-
-        // Désélectionner "Aucun" si un autre département est sélectionné
-        document.querySelectorAll('input[type="checkbox"]:not(#dept_aucun)').forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
-                if (this.checked) {
-                    document.getElementById('dept_aucun').checked = false;
-                }
-                updateSelectedDepartments();
-            });
-        });
 
         // Ajouter les écouteurs d'événements pour la validation
         document.getElementById('contact1').addEventListener('input', function() {
@@ -424,7 +298,7 @@
             event.preventDefault();
 
             const submitButton = this.querySelector('button[type="submit"]');
-            const message = document.getElementById("message");
+            const buttonText = submitButton.textContent.trim();
             
             // Désactiver le bouton et afficher le spinner
             submitButton.disabled = true;
@@ -439,38 +313,17 @@
             const quartier = document.getElementById("quartier").value.trim();
             const situ_mat = document.getElementById("situ_mat").value.trim();
             const situ_spirit = document.getElementById("situ_spirit").value.trim();
+            const departement = document.getElementById("departement").value.trim();
             const profession = document.getElementById("profession").value.trim();
             const secteur = document.getElementById("secteur").value.trim();
 
-            // Récupérer les départements sélectionnés
-            const selectedDepartments = [];
-            const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
-            checkboxes.forEach(checkbox => {
-                selectedDepartments.push(checkbox.value);
-            });
 
-            // Vérifier qu'au moins un département est sélectionné
-            if (selectedDepartments.length === 0) {
-                message.textContent = "❌ Veuillez sélectionner au moins un département";
-                message.className = "error-message";
-                submitButton.disabled = false;
-                submitButton.classList.remove('loading');
-                return;
-            }
 
             // Valider les numéros de téléphone avant l'envoi
-            if (!/^\+225[0-9]{10}$/.test(contact1)) {
-                message.textContent = "❌ Le numéro de téléphone principal est invalide";
+            if (!/^\+225[0-9]{10}$/.test(contact1) || !/^\+225[0-9]{10}$/.test(contact2)) {
+                message.textContent = "❌ Les numéros de téléphone sont invalides";
                 message.className = "error-message";
-                submitButton.disabled = false;
-                submitButton.classList.remove('loading');
-                return;
-            }
-
-            // Valider le contact WhatsApp seulement s'il n'est pas vide
-            if (contact2 !== '' && !/^\+225[0-9]{10}$/.test(contact2)) {
-                message.textContent = "❌ Le numéro WhatsApp est invalide";
-                message.className = "error-message";
+                // Réactiver le bouton en cas d'erreur
                 submitButton.disabled = false;
                 submitButton.classList.remove('loading');
                 return;
@@ -480,13 +333,13 @@
                 nom, 
                 prenom, 
                 contact1, 
-                contact2: contact2 || 'Non renseigné', // Valeur par défaut si vide
+                contact2, 
                 jour_mois_naiss, 
                 famille_jeun, 
                 quartier, 
                 situ_mat, 
                 situ_spirit, 
-                departement: selectedDepartments.join(', '), // Joindre les départements avec des virgules
+                departement, 
                 profession, 
                 secteur 
             };
@@ -500,10 +353,9 @@
                 });
 
                 const result = await response.text();
-                message.textContent = "✅ Que Dieu te bénisse " + result;
+                message.textContent = "✅Que Dieu te bénisse " + result;
                 message.className = "success-message";
                 document.getElementById("form").reset();
-                updateSelectedDepartments(); // Réinitialiser l'affichage des départements
             } catch (error) {
                 message.textContent = "❌ Erreur : " + error.message;
                 message.className = "error-message";
@@ -513,9 +365,6 @@
                 submitButton.classList.remove('loading');
             }
         });
-
-        // Initialiser l'affichage des départements sélectionnés
-        updateSelectedDepartments();
     </script>
 </body>
 </html>

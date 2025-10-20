@@ -91,7 +91,13 @@ function doPost(e) {
       row: sheet.getLastRow(),
       timestamp: dateEnregistrement.toISOString(),
       executionTime: executionTime + "ms"
-    })).setMimeType(ContentService.MimeType.JSON);
+    }))
+    .setMimeType(ContentService.MimeType.JSON)
+    .setHeaders({
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type'
+    });
 
   } catch (error) {
     Logger.log("ERREUR CRITIQUE: " + error.message);
@@ -113,7 +119,13 @@ function createErrorResponse(message, errorCode) {
     message: message,
     errorCode: errorCode,
     timestamp: new Date().toISOString()
-  })).setMimeType(ContentService.MimeType.JSON);
+  }))
+  .setMimeType(ContentService.MimeType.JSON)
+  .setHeaders({
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type'
+  });
 }
 
 // ========================================
@@ -239,6 +251,18 @@ function testConnection() {
 // FONCTION GET AMÉLIORÉE
 // ========================================
 
+// Fonction pour gérer les requêtes OPTIONS (CORS preflight)
+function doOptions(e) {
+  return ContentService.createTextOutput("")
+    .setMimeType(ContentService.MimeType.TEXT)
+    .setHeaders({
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Max-Age': '3600'
+    });
+}
+
 // Fonction GET optimisée pour tester l'API
 function doGet(e) {
   try {
@@ -270,7 +294,12 @@ function doGet(e) {
     };
     
     return ContentService.createTextOutput(JSON.stringify(response))
-      .setMimeType(ContentService.MimeType.JSON);
+      .setMimeType(ContentService.MimeType.JSON)
+      .setHeaders({
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type'
+      });
       
   } catch (error) {
     return createErrorResponse("Erreur interne du serveur", "INTERNAL_ERROR");

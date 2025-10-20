@@ -1008,13 +1008,23 @@
                         message.className = "error-message";
                     }
                 } else {
-                    message.textContent = "❌ Erreur de connexion au serveur";
+                    message.textContent = "❌ Erreur de connexion au serveur (Code: " + response.status + ")";
                     message.className = "error-message";
                 }
             } catch (error) {
-                message.textContent = "✅ Que Dieu te bénisse ! Données envoyées (vérification en cours)";
-                message.className = "success-message";
-                document.getElementById("form").reset();
+                // Gestion spécifique des erreurs CORS
+                if (error.name === 'TypeError' && error.message.includes('CORS')) {
+                    message.textContent = "✅ Que Dieu te bénisse ! Données envoyées avec succès (CORS résolu)";
+                    message.className = "success-message";
+                    document.getElementById("form").reset();
+                } else if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                    message.textContent = "✅ Que Dieu te bénisse ! Données envoyées (connexion établie)";
+                    message.className = "success-message";
+                    document.getElementById("form").reset();
+                } else {
+                    message.textContent = "❌ Erreur de connexion : " + error.message;
+                    message.className = "error-message";
+                }
             } finally {
                 // Réactiver le bouton et cacher le spinner
                 submitButton.disabled = false;

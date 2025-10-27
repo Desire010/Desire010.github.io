@@ -723,18 +723,21 @@
             <!-- Question sur le diplôme -->
             <div class="form-group">
                 <label style="display: block; margin-bottom: 10px; font-weight: bold; color: #333;">
-                    Êtes-vous diplômé(e) ?
+                    Êtes-vous diplômé(e) ? (plusieurs choix possibles)
                 </label>
-                <div style="display: flex; gap: 20px; justify-content: center;">
-                    <label style="display: flex; align-items: center; cursor: pointer;">
-                        <input type="radio" name="diplome" value="Oui" style="margin-right: 8px;">
+                <div class="checkbox-container">
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="diplome" value="Oui">
+                        <span class="checkmark"></span>
                         Oui
                     </label>
-                    <label style="display: flex; align-items: center; cursor: pointer;">
-                        <input type="radio" name="diplome" value="Non" style="margin-right: 8px;">
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="diplome" value="Non">
+                        <span class="checkmark"></span>
                         Non
                     </label>
                 </div>
+                <div id="diplome-summary" style="display: none; margin-top: 10px; padding: 8px; background-color: #e8f5e8; border-radius: 5px; font-size: 14px; color: #2e7d32;"></div>
             </div>
 
             <!-- Question sur le niveau d'étude -->
@@ -864,26 +867,31 @@
             <!-- Question sur la recherche d'emploi -->
             <div class="form-group">
                 <label style="display: block; margin-bottom: 10px; font-weight: bold; color: #333;">
-                    Êtes-vous en quête d'emploi ?
+                    Êtes-vous en quête d'emploi ? (plusieurs choix possibles)
                 </label>
-                <div style="display: grid; grid-template-columns: 1fr; gap: 10px;">
-                    <label style="display: flex; align-items: center; cursor: pointer; padding: 8px; border-radius: 5px; transition: background-color 0.3s;">
-                        <input type="radio" name="recherche_emploi" value="Oui je n'ai jamais travaillé" style="margin-right: 8px;">
+                <div class="checkbox-container">
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="recherche_emploi" value="Oui je n'ai jamais travaillé">
+                        <span class="checkmark"></span>
                         Oui je n'ai jamais travaillé
                     </label>
-                    <label style="display: flex; align-items: center; cursor: pointer; padding: 8px; border-radius: 5px; transition: background-color 0.3s;">
-                        <input type="radio" name="recherche_emploi" value="Oui je cherche une meilleure opportunité" style="margin-right: 8px;">
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="recherche_emploi" value="Oui je cherche une meilleure opportunité">
+                        <span class="checkmark"></span>
                         Oui je cherche une meilleure opportunité
                     </label>
-                    <label style="display: flex; align-items: center; cursor: pointer; padding: 8px; border-radius: 5px; transition: background-color 0.3s;">
-                        <input type="radio" name="recherche_emploi" value="Non je travaille déjà" style="margin-right: 8px;">
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="recherche_emploi" value="Non je travaille déjà">
+                        <span class="checkmark"></span>
                         Non je travaille déjà
                     </label>
-                    <label style="display: flex; align-items: center; cursor: pointer; padding: 8px; border-radius: 5px; transition: background-color 0.3s;">
-                        <input type="radio" name="recherche_emploi" value="Non je continue mes études" style="margin-right: 8px;">
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="recherche_emploi" value="Non je continue mes études">
+                        <span class="checkmark"></span>
                         Non je continue mes études
                     </label>
                 </div>
+                <div id="recherche-summary" style="display: none; margin-top: 10px; padding: 8px; background-color: #e8f5e8; border-radius: 5px; font-size: 14px; color: #2e7d32;"></div>
             </div>
 
             <!-- Question sur les formations d'intérêt -->
@@ -1196,6 +1204,22 @@
             });
         });
 
+        // Gestion de la recherche d'emploi (cases à cocher)
+        document.querySelectorAll('input[name="recherche_emploi"]').forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                // Mettre à jour le résumé de la recherche d'emploi
+                updateRechercheSummary();
+            });
+        });
+
+        // Gestion du diplôme (cases à cocher)
+        document.querySelectorAll('input[name="diplome"]').forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                // Mettre à jour le résumé du diplôme
+                updateDiplomeSummary();
+            });
+        });
+
         // Fonction pour mettre à jour le résumé des départements
         function updateDepartementSummary() {
             const selectedDepartements = document.querySelectorAll('input[name="departement"]:checked');
@@ -1238,6 +1262,34 @@
             }
         }
 
+        // Fonction pour mettre à jour le résumé de la recherche d'emploi
+        function updateRechercheSummary() {
+            const selectedRecherches = document.querySelectorAll('input[name="recherche_emploi"]:checked');
+            const summaryElement = document.getElementById('recherche-summary');
+            
+            if (selectedRecherches.length > 0) {
+                const rechercheNames = Array.from(selectedRecherches).map(cb => cb.value);
+                summaryElement.textContent = 'Statuts sélectionnés: ' + rechercheNames.join(', ');
+                summaryElement.style.display = 'block';
+            } else {
+                summaryElement.style.display = 'none';
+            }
+        }
+
+        // Fonction pour mettre à jour le résumé du diplôme
+        function updateDiplomeSummary() {
+            const selectedDiplomes = document.querySelectorAll('input[name="diplome"]:checked');
+            const summaryElement = document.getElementById('diplome-summary');
+            
+            if (selectedDiplomes.length > 0) {
+                const diplomeNames = Array.from(selectedDiplomes).map(cb => cb.value);
+                summaryElement.textContent = 'Statuts diplôme sélectionnés: ' + diplomeNames.join(', ');
+                summaryElement.style.display = 'block';
+            } else {
+                summaryElement.style.display = 'none';
+            }
+        }
+
         document.getElementById("form").addEventListener("submit", async function (event) {
             event.preventDefault();
 
@@ -1264,7 +1316,9 @@
             const departement = Array.from(departementCheckboxes).map(cb => cb.value).join(', ');
             
             // Nouveaux champs ajoutés
-            const diplome = document.querySelector('input[name="diplome"]:checked')?.value || "";
+            // Récupération du diplôme sélectionné (sélection multiple)
+            const diplomeCheckboxes = document.querySelectorAll('input[name="diplome"]:checked');
+            const diplome = Array.from(diplomeCheckboxes).map(cb => cb.value).join(', ');
             const niveau_etude = document.getElementById("niveau_etude").value.trim();
             const autre_niveau_precision = document.getElementById("autre_niveau_precision").value.trim();
             
@@ -1273,7 +1327,9 @@
             const competence = Array.from(competenceCheckboxes).map(cb => cb.value).join(', ');
             const autre_competence_precision = document.getElementById("autre_competence_precision").value.trim();
             
-            const recherche_emploi = document.querySelector('input[name="recherche_emploi"]:checked')?.value || "";
+            // Récupération de la recherche d'emploi sélectionnée (sélection multiple)
+            const rechercheCheckboxes = document.querySelectorAll('input[name="recherche_emploi"]:checked');
+            const recherche_emploi = Array.from(rechercheCheckboxes).map(cb => cb.value).join(', ');
             
             // Récupération des formations d'intérêt sélectionnées (sélection multiple)
             const formationCheckboxes = document.querySelectorAll('input[name="formation_interet"]:checked');

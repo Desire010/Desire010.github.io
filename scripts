@@ -90,12 +90,12 @@ function doPost(e) {
       sanitizeData(data.profession || ""),
       sanitizeData(data.secteur || ""),
       // Nouveaux champs ajoutés
-      sanitizeData(data.diplome || ""),
+      sanitizeMultipleChoice(data.diplome || ""),
       sanitizeData(data.niveau_etude || ""),
       sanitizeData(data.autre_niveau_precision || ""),
       sanitizeMultipleChoice(data.competence || ""),
       sanitizeData(data.autre_competence_precision || ""),
-      sanitizeData(data.recherche_emploi || ""),
+      sanitizeMultipleChoice(data.recherche_emploi || ""),
       sanitizeMultipleChoice(data.formation_interet || ""),
       sanitizeData(data.autre_formation_precision || ""),
       dateEnregistrement
